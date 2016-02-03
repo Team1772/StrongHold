@@ -10,8 +10,13 @@ public class Drive {
 	private Victor rightMotor;
     private Encoder leftEncoder;
     private Encoder rightEncoder;
-    private final PIDController leftPID;
-    private final PIDController rightPID;
+    private PIDController leftPID;
+    private PIDController rightPID;
+    
+    public Drive (int pwmLM, int pwmRM) {
+    	leftMotor    = new Victor(pwmLM);
+    	rightMotor   = new Victor(pwmRM);
+    }
     
     public Drive (int pwmLM, int pwmRM, int pwmLEA, int pwmLEB, int pwmREA, int pwmREB) {
 
