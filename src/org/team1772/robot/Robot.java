@@ -5,20 +5,19 @@ import org.team1772.subsystems.Drive;
 import org.team1772.util.XboxControl;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.Victor;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 public class Robot extends IterativeRobot {
 
 	Drive driveTrain;
 	XboxControl xbox;
+	double l, r;
+	boolean botaoapertado;
 
     public void robotInit() {
     	driveTrain = Drive.getInstance();
     	xbox  = new XboxControl(0);
+    	driveTrain.liveWindow();
     }
 
     public void autonomousInit() {
@@ -29,19 +28,41 @@ public class Robot extends IterativeRobot {
      */
     public void autonomousPeriodic() {
     }
+    
+    public void teleopInit() {
+    	botaoapertado = false;
+    	
+    	driveTrain.start();
+    }
 
     /**
      * This function is called periodically during operator control
      */
     public void teleopPeriodic() {
-    	driveTrain.setInputSpeed(xbox.getAxisLeftY(), xbox.getAxisRightY());
+    	//driveTrain.setInputSpeed(xbox.getAxisLeftY(), xbox.getAxisRightY());
+    	
+    	driveTrain.print();
+    	
+    	// funcao PID
+    	if (xbox.getButtonX()) {
+			botaoapertado = true;
+		} else if (xbox.getButtonY()) {
+			botaoapertado = false;
+			driveTrain.start();
+			driveTrain.setSetPoint(0, 0);
+		}
+    	if (botaoapertado) {
+    		driveTrain.setSetPoint(100, 100);
+		}
+    	
     }
     
-    /**
-     * This function is called periodically during test mode
-     */
-    public void testPeriodic() {
+    public void testInit() {
+    	driveTrain.start();
+    }
     
+    public void testPeriodic() {
+    	driveTrain.print();
     }
     
 }
